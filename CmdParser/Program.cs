@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
+using CmdParser;
+
 
 namespace CmdParser
 {
@@ -13,33 +15,21 @@ namespace CmdParser
         [STAThread]
         static void Main(string[] args)
         {
-            var theDialog = new OpenFileDialog();
-            theDialog.Title = "Open Text File";
-            theDialog.Filter = "TXT files|*.txt";
-            theDialog.InitialDirectory = @"C:\";
+            string[] raidList = new string[0];
+            PlayerInfo pi = new PlayerInfo();
+            ManipulateRaiderText mt = new ManipulateRaiderText();
 
-            if (theDialog.ShowDialog() == DialogResult.OK)
-            {
-                string filename = theDialog.FileName;
-                var list = new List<string>();
-                var fileStream = new FileStream(filename, FileMode.Open,FileAccess.Read)
-                ;
-                using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
-                {
-                    string line;
-                    while ((line = streamReader.ReadLine()) != null)
-                    {
-                        list.Add(line);
-                    }
-                }
-                var lines = list.ToArray();
-                foreach (string line in lines)
-                {
-                    Console.WriteLine(line);
-                }
-            }
-            Console.WriteLine("Press any key to end.");
+            raidList = pi.GetPlayers();
+
+            var raiders = mt.FilterRaiders(raidList);
+            var mains = mt.GetMainsList(raiders);
+            var dkpOutput = mt.ListOutDKPReport(raiders, mains);
+
+            pi.SaveRaiderList(dkpOutput);
+            Console.WriteLine("Press any key to end program ...");
             Console.ReadLine();
+
         }
     }
+
 }

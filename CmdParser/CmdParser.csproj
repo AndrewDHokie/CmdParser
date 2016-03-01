@@ -44,6 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alt.cs" />
+    <Compile Include="ManipulateRaiderText.cs" />
+    <Compile Include="Member.cs" />
+    <Compile Include="PlayerInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
